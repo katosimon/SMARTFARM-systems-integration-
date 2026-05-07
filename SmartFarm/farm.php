@@ -1,15 +1,6 @@
 <?php
 require "db_config.php";
-// ============================================================
-// SmartFarm - Smart Farming Management Application
-// Backend PHP Logic
-// ============================================================
-
 session_start();
-
-// ---- Database simulation (In production, use MySQL/PDO) ----
-// Sample data arrays acting as DB for demo
-
 // Handle POST actions FIRST so the data is available for the fetch below
 $action_msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -40,13 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ---- FETCH LIVE DATA FROM DATABASE ----
+// fetch the data from DB
 $employees = $pdo->query("SELECT * FROM employees")->fetchAll();
 $inventory = $pdo->query("SELECT * FROM inventory")->fetchAll();
 $sales     = $pdo->query("SELECT * FROM sales ORDER BY date DESC")->fetchAll();
 $tasks     = $pdo->query("SELECT * FROM tasks ORDER BY due ASC")->fetchAll();
 
-// Note: Events are still static for now as they are usually fixed calendar items
 $events = [
     ['id'=>1,'title'=>'Agri-Expo Kampala','date'=>'2026-05-15','type'=>'exhibition','desc'=>'Annual agricultural exhibition at Kololo Grounds'],
     ['id'=>2,'title'=>'Vet Visit - Livestock','date'=>'2026-05-08','type'=>'appointment','desc'=>'Quarterly veterinary inspection'],
@@ -54,7 +44,7 @@ $events = [
     ['id'=>4,'title'=>'Supplier Delivery - Seeds','date'=>'2026-05-07','type'=>'delivery','desc'=>'SeedCo hybrid maize seeds delivery'],
 ];
 
-// ---- COMPUTED STATS (Now based on DB data) ----
+// stats will Now come from DB data
 $total_sales = array_sum(array_map(fn($s) => $s['qty'] * $s['price_unit'], $sales));
 $completed_sales = array_filter($sales, fn($s) => $s['status'] === 'completed');
 $total_completed = array_sum(array_map(fn($s) => $s['qty'] * $s['price_unit'], $completed_sales));
@@ -79,7 +69,7 @@ $active_tab = $_GET['tab'] ?? 'dashboard';
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ========== CSS VARIABLES & RESET ========== */
+
 :root {
   --bg:        #0b1a12;
   --bg2:       #0f2318;
@@ -232,7 +222,6 @@ body {
 .user-name { font-size: 13px; font-weight: 600; }
 .user-role { font-size: 11px; color: var(--text3); }
 
-/* ========== MAIN CONTENT ========== */
 .main {
   margin-left: var(--sidebar-w);
   flex: 1;
