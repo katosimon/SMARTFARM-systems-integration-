@@ -1510,8 +1510,10 @@ select.form-control { cursor: pointer; }
       </div>
       <div class="stat-card blue">
         <div class="stat-header"><div class="stat-label">Avg. Salary</div><div class="stat-icon">📊</div></div>
-        <div class="stat-value">UGX <?= number_format($total_payroll/count($employees)/1000) ?>K</div>
-      </div>
+        <div class="stat-value">
+    UGX <?= (!empty($employees)) ? number_format($total_payroll / count($employees) / 1000) : '0' ?>K
+</div>
+
     </div>
 
     <!-- Add Employee Form -->
